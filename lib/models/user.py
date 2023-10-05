@@ -36,3 +36,24 @@ class User:
         """
         CURSOR.execute(sql)
         CONN.commit()
+
+    def save(self):
+        """ Insert a new row with the first name, last name, email, username and password values of the current User instance.
+        Update object id attribute using the primary key value of new row.
+        """
+        sql = """
+            INSERT INTO users (first_name, last_name, email, username, password)
+            VALUES (?, ?, ?, ?, ?)
+        """
+
+        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password))
+        CONN.commit()
+
+        self.id = CURSOR.lastrowid
+
+    @classmethod
+    def create(cls, first_name, last_name, email, username, password):
+        """ Initialize a new User instance and save the object to the database """
+        user = cls(first_name, last_name, email, username, password)
+        user.save()
+        return user
