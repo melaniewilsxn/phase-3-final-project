@@ -15,4 +15,12 @@ print(melanie)
 makayla = User.create("Makayla", "Martorana", "makayla.martorana@gmail.com", "makaylamartorana", "December13")
 print(makayla)
 
+makayla.first_name = "Kayla"
+makayla.update()
+print(makayla)
+
+print("Delete Melanie")
+melanie.delete()
+print(melanie)
+
 ipdb.set_trace()

@@ -57,3 +57,23 @@ class User:
         user = cls(first_name, last_name, email, username, password)
         user.save()
         return user
+
+    def update(self):
+        """Update the table row corresponding to the current User instance."""
+        sql = """
+            UPDATE users
+            SET first_name = ?, last_name = ?, email = ?, username = ?, password = ?
+            WHERE id = ?
+        """
+        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password, self.id))
+        CONN.commit()
+
+    def delete(self):
+        """Delete the table row corresponding to the current User instance"""
+        sql = """
+            DELETE FROM users
+            WHERE id = ?
+        """
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
