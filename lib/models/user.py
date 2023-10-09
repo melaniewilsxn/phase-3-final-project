@@ -1,6 +1,8 @@
 from models.__init__ import CURSOR, CONN
 
 class User:
+
+    all = {}
     
     def __init__(self, first_name, last_name, email, username, password, id=None):
         self.id = id
@@ -11,7 +13,7 @@ class User:
         self.password = password
 
     def __repr__(self):
-        return f"<User: {self.id}: {self.first_name} {self.last_name}>"
+        return f"<User {self.id}: {self.first_name} {self.last_name}>"
 
     @classmethod
     def create_table(cls):
@@ -50,6 +52,7 @@ class User:
         CONN.commit()
 
         self.id = CURSOR.lastrowid
+        type(self).all[self.id] = self
 
     @classmethod
     def create(cls, first_name, last_name, email, username, password):
@@ -69,7 +72,7 @@ class User:
         CONN.commit()
 
     def delete(self):
-        """Delete the table row corresponding to the current User instance"""
+        """Delete the table row corresponding to the current User instance, delete the dictionary entry, and reassign id attribute"""
         sql = """
             DELETE FROM users
             WHERE id = ?
@@ -77,3 +80,84 @@ class User:
 
         CURSOR.execute(sql, (self.id,))
         CONN.commit()
+    
+        del type(self).all[self.id]
+        self.id = None
+
+
+    @classmethod
+    def instance_from_db(cls, row):
+        """Return a User object having the attribute values from the table row."""
+
+        # Check the dictionary for an existing instance using the row's primary key
+        user = cls.all.get(row[0])
+        if user:
+            # ensure attributes match row values in case local object was modified
+            user.first_name = row[1]
+            user.last_name = row[2]
+            user.email = row[3]
+            user.username = row[4]
+            user.password = row[5]
+        else:
+            # not in dictionary, create new instance and add to dictionary
+            user = cls(row[1], row[2], row[3], row[4], row[5])
+            user.id = cls(row[0])
+            cls.all[user.id] = user
+        return user
+
+    @classmethod
+    def get_all(cls):
+        """Return a list containing a User object per row in the table"""
+        sql = """
+            SELECT *
+            FROM users
+        """
+
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+
+    @classmethod
+    def find_by_id(cls, id):
+        """Return a User object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM users
+            WHERE id = ?
+        """
+
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+    @classmethod
+    def find_by_name(cls, first_name, last_name):
+        """Return a User object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM users
+            WHERE first_name = ? AND last_name = ?
+        """
+        row = CURSOR.execute(sql, (first_name, last_name,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def find_by_email(cls, email):
+        """Return a User object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM users
+            WHERE email = ?
+        """
+        row = CURSOR.execute(sql, (email,)).fetchone()
+        return cls.instance_from_db(row) if row else None
+
+    @classmethod
+    def find_by_username(cls, username):
+        """Return a User object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM users
+            WHERE username = ?
+        """
+        row = CURSOR.execute(sql, (username,)).fetchone()
+        return cls.instance_from_db(row) if row else None
