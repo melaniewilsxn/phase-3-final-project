@@ -32,7 +32,7 @@ class User:
     
     @classmethod
     def drop_table(cls):
-        """ Drop the table that persists Department instances """
+        """ Drop the table that persists User instances """
         sql = """
             DROP TABLE IF EXISTS users;
         """
@@ -48,7 +48,7 @@ class User:
             VALUES (?, ?, ?, ?, ?)
         """
 
-        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password))
+        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password,))
         CONN.commit()
 
         self.id = CURSOR.lastrowid
@@ -68,7 +68,7 @@ class User:
             SET first_name = ?, last_name = ?, email = ?, username = ?, password = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password, self.id))
+        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password, self.id,))
         CONN.commit()
 
     def delete(self):
