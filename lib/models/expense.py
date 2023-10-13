@@ -16,8 +16,8 @@ class Expense:
 
     def __repr__(self):
         return (
-            f"<Expense {self.id}: {self.date}, ${self.amount}, {self.description} " +
-            f"User ID: {self.user_id}>" +
+            f"<Expense {self.id}: {self.date}, ${self.amount}, {self.description}; " +
+            f"User ID: {self.user_id}; " +
             f"Category ID: {self.category_id}>"
         )
 
@@ -99,3 +99,27 @@ class Expense:
             expense.id = row[0]
             cls.all[expense.id] = expense
         return expense
+
+    @classmethod
+    def get_all(cls):
+        """Return a list containing one Expense object per table row"""
+        sql = """
+            SELECT *
+            FROM expenses
+        """
+
+        rows = CURSOR.execute(sql).fetchall()
+
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_id(cls, id):
+        """Return Expense object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM expenses
+            WHERE id = ?
+        """
+
+        row = CURSOR.execute(sql, (id,)).fetchone()
+        return cls.instance_from_db(row) if row else None
