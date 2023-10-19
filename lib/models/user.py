@@ -1,16 +1,18 @@
 from models.__init__ import CURSOR, CONN
 import sqlite3
+import bcrypt
 
 class User:
 
     all = {}
     
-    def __init__(self, first_name, last_name, email, username, password, id=None):
+    def __init__(self, first_name, last_name, email, username, password, id=None, is_hashed=False):
         self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
         self.username = username
+        self.is_hashed = is_hashed
         self.password = password
 
     def __repr__(self):
@@ -59,6 +61,36 @@ class User:
             self._username = username
         else:
             raise ValueError("Username must be a non-empty string")
+    
+    @property
+    def password(self):
+        return self._password
+    
+    def validate_password(self, password):
+        if not isinstance(password, str) or len(password) < 8:
+            raise ValueError("Password must be a string with at least 8 characters")
+        if len(password) > 128:
+            raise ValueError("Password must be less than 128 characters")
+        if not any(char.isupper() for char in password):
+            raise ValueError("Password must contain at least one uppercase letter")
+        if not any(char.islower() for char in password):
+            raise ValueError("Password must contain at least one lowercase letter")
+        if not any(char.isdigit() for char in password):
+            raise ValueError("Password must contain at least one digit")
+        if '12345' in password or 'abcde' in password:
+            raise ValueError("Password must not contain sequential characters")
+        
+    def hash_password(self, password):
+        return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+
+    @password.setter
+    def password(self, password):
+        if not self.is_hashed:
+            self.validate_password(password)
+            self._password = self.hash_password(password)
+            self.is_hashed = True
+        else:
+            self._password = password
 
     @classmethod
     def create_table(cls):
@@ -154,8 +186,8 @@ class User:
             user.password = row[5]
         else:
             # not in dictionary, create new instance and add to dictionary
-            user = cls(row[1], row[2], row[3], row[4], row[5])
-            user.id = cls(row[0])
+            user = cls(row[1], row[2], row[3], row[4], row[5], id=row[0], is_hashed=True)
+            # user.id = cls(row[0])
             cls.all[user.id] = user
         return user
 
