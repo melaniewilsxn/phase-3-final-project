@@ -11,6 +11,17 @@ class Category:
     def __repr__(self):
         return f"<Category {self.id}: {self.name}>"
     
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, name):
+        if isinstance(name, str) and len(name):
+            self._name = name
+        else:
+            raise ValueError("Category name must be a non-empty string")
+    
     @classmethod
     def create_table(cls):
         """ Create a new table to persist the attributes of Category instances """
