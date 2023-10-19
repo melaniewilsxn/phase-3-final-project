@@ -1,4 +1,5 @@
 from models.__init__ import CURSOR, CONN
+import sqlite3
 
 class User:
 
@@ -14,6 +15,50 @@ class User:
 
     def __repr__(self):
         return f"<User {self.id}: {self.first_name} {self.last_name}>"
+    
+    @property
+    def first_name(self):
+        return self._first_name
+
+    @first_name.setter
+    def first_name(self, first_name):
+        if isinstance(first_name, str) and len(first_name):
+            self._first_name = first_name
+        else:
+            raise ValueError("First name must be a non-empty string")
+    
+    @property
+    def last_name(self):
+        return self._last_name
+
+    @last_name.setter
+    def last_name(self, last_name):
+        if isinstance(last_name, str) and len(last_name):
+            self._last_name = last_name
+        else:
+            raise ValueError("Last name must be a non-empty string")
+    
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, email):
+        if isinstance(email, str) and len(email):
+            self._email = email
+        else:
+            raise ValueError("Email must be a non-empty string")
+    
+    @property
+    def username(self):
+        return self._username
+
+    @username.setter
+    def username(self, username):
+        if isinstance(username, str) and len(username):
+            self._username = username
+        else:
+            raise ValueError("Username must be a non-empty string")
 
     @classmethod
     def create_table(cls):
@@ -23,8 +68,8 @@ class User:
             id INTEGER PRIMARY KEY,
             first_name TEXT,
             last_name TEXT,
-            email TEXT,
-            username TEXT,
+            email TEXT UNIQUE,
+            username TEXT UNIQUE,
             password TEXT)
         """
         CURSOR.execute(sql)
@@ -48,11 +93,20 @@ class User:
             VALUES (?, ?, ?, ?, ?)
         """
 
-        CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password,))
-        CONN.commit()
+        try:
+            CURSOR.execute(sql, (self.first_name, self.last_name, self.email, self.username, self.password,))
+            CONN.commit()
 
-        self.id = CURSOR.lastrowid
-        type(self).all[self.id] = self
+            self.id = CURSOR.lastrowid
+            type(self).all[self.id] = self
+
+        except sqlite3.IntegrityError as e:
+            if "UNIQUE constraint failed: users.email" in str(e):
+                raise ValueError(f"Email {self.email} already exists in database! Please login or use a different email.")
+            elif "UNIQUE constraint failed: users.username" in str(e):
+                raise ValueError(f"Username {self.username} already exists in database! Please login or use a different email.")
+            else:
+                raise e
 
     @classmethod
     def create(cls, first_name, last_name, email, username, password):
