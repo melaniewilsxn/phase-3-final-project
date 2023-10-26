@@ -1,10 +1,12 @@
 from models.__init__ import CURSOR, CONN
 from models.user import User
 from models.category import Category
+from datetime import datetime
 
 class Expense:
 
     all = {}
+    DATE_FORMAT = "%Y-%m-%d"
 
     def __init__(self, user_id, date, amount, category_id, description, id=None):
         self.id = id
@@ -20,6 +22,64 @@ class Expense:
             f"User ID: {self.user_id}; " +
             f"Category ID: {self.category_id}>"
         )
+    
+    @property
+    def user_id(self):
+        return self._user_id
+
+    @user_id.setter
+    def user_id(self, user_id):
+        if type(user_id) is int and User.find_by_id(user_id):
+            self._user_id = user_id
+        else:
+            raise ValueError(
+                "user_id must reference a user in the database")
+    
+    @property
+    def date(self):
+        return self._date
+
+    @date.setter
+    def date(self, date):
+        try:
+            date_obj = datetime.strptime(date, Expense.DATE_FORMAT)
+            self._date = date_obj
+        except ValueError:
+            raise ValueError(f"Date does not match format YYYY-MM-DD.")
+    
+    @property
+    def amount(self):
+        return self._amount
+
+    @amount.setter
+    def amount(self, amount):
+        if isinstance(amount, float) and (amount > 0):
+            self._amount = amount
+        else:
+            raise ValueError("Amount must be a positive integer")
+        
+    @property
+    def category_id(self):
+        return self._category_id
+
+    @category_id.setter
+    def category_id(self, category_id):
+        if type(category_id) is int and Category.find_by_id(category_id):
+            self._category_id = category_id
+        else:
+            raise ValueError(
+                "category_id must reference a category in the database")
+    
+    @property
+    def description(self):
+        return self._description
+
+    @description.setter
+    def description(self, description):
+        if isinstance(description, str) and len(description):
+            self._description = description
+        else:
+            raise ValueError("Description must be a non-empty integer")
 
     @classmethod
     def create_table(cls):
