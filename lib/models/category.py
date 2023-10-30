@@ -99,7 +99,7 @@ class Category:
         else:
             # not in dictionary, create new instance and add to dictionary
             category = cls(row[1])
-            category.id = cls(row[0])
+            category.id = row[0]
             cls.all[category.id] = category
         return category
 
@@ -137,3 +137,17 @@ class Category:
         """
         row = CURSOR.execute(sql, (name,)).fetchone()
         return cls.instance_from_db(row) if row else None
+    
+    def expenses(self):
+        """Return list of expenses associated with current category"""
+        from models.expense import Expense
+        sql = """
+            SELECT * FROM expenses
+            WHERE category_id = ?
+        """
+        CURSOR.execute(sql, (self.id,),)
+
+        rows = CURSOR.fetchall()
+        return [
+            Expense.instance_from_db(row) for row in rows
+        ]

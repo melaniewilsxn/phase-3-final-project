@@ -17,10 +17,11 @@ class Expense:
         self.description = description
 
     def __repr__(self):
+        category_name = self.get_category_name()
+        date_str = self.date.strftime(self.DATE_FORMAT)
         return (
-            f"<Expense {self.id}: {self.date}, ${self.amount}, {self.description}; " +
-            f"User ID: {self.user_id}; " +
-            f"Category ID: {self.category_id}>"
+            f"<Expense Date: {date_str}" +
+            f"\nCategory: {category_name}, Amount: ${self.amount}, Description: {self.description}>"
         )
     
     @property
@@ -41,11 +42,18 @@ class Expense:
 
     @date.setter
     def date(self, date):
-        try:
-            date_obj = datetime.strptime(date, Expense.DATE_FORMAT)
-            self._date = date_obj
-        except ValueError:
-            raise ValueError(f"Date does not match format YYYY-MM-DD.")
+        if isinstance(date, datetime):
+            self._date = date
+        else:
+            try:
+                date_obj = datetime.strptime(date, self.DATE_FORMAT)
+                self._date = date_obj
+            except ValueError:
+                try:
+                    date_obj = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
+                    self._date = date_obj
+                except ValueError:
+                    raise ValueError(f"Date does not match format {self.DATE_FORMAT} or YYYY-MM-DD HH:MM:SS.")
     
     @property
     def amount(self):
@@ -183,3 +191,7 @@ class Expense:
 
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
+
+    def get_category_name(self):
+        category = Category.find_by_id(self.category_id)
+        return category.name if category else 'Unknown Category'

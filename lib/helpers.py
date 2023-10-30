@@ -1,8 +1,9 @@
 # lib/helpers.py
 from models.user import User
+from models.expense import Expense
+from models.category import Category
 import bcrypt
-
-current_user = None
+from getpass import getpass
 
 def exit_program():
     print("Goodbye!")
@@ -10,7 +11,7 @@ def exit_program():
 
 def login():
     username = input("Enter your username: ")
-    password = input("Enter your password: ")
+    password = getpass("Enter your password: ")
 
     user = User.find_by_username(username)
     
@@ -36,3 +37,19 @@ def create_user():
         print(f'Success: {user}')
     except Exception as exc:
         print("Error creating new user: ", exc)
+
+def list_all_expenses(user):
+    expenses = user.expenses()
+    for expense in expenses:
+        print(expense)
+
+def list_categories():
+    categories = Category.get_all()
+    for category in categories:
+        print(category)
+
+def list_expenses_by_category(category_id):
+    category = Category.find_by_id(category_id)
+    expenses = category.expenses()
+    for expense in expenses:
+        print(expense)

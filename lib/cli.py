@@ -4,17 +4,21 @@ from helpers import (
     exit_program,
     login,
     create_user,
-    current_user
+    list_all_expenses,
+    list_categories,
+    list_expenses_by_category
 )
 
-def main_menu():
+def main_menu(current_user):
     while True:
         menu()
         choice = input("> ")
         if choice == "1":
-            pass
+            list_all_expenses(current_user)
         elif choice == "2":
-            pass
+            list_categories()
+            category_id = input("Please enter the number corresponding to the category you would like to see expenses for: ")
+            list_expenses_by_category(category_id)
         elif choice == "3":
             pass
         elif choice == "4":
@@ -40,7 +44,6 @@ def main_menu():
         elif choice == "14":
             pass
         elif choice == "0":
-            global current_user
             current_user = None
             login_menu()
         else:
@@ -48,7 +51,6 @@ def main_menu():
 
 
 def login_menu():
-    global current_user
     while True:
         print("\nWelcome to the Expense Tracker App!")
         print("1. Log in")
@@ -61,9 +63,8 @@ def login_menu():
         elif choice == "1":
             user = login()
             if user:
-                current_user = user
-                print(f"Welcome back, {current_user.first_name}!")
-                main_menu()
+                print(f"Welcome back, {user.first_name}!")
+                main_menu(user)
                 break
         elif choice == "2":
             create_user()
