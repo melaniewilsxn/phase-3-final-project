@@ -53,7 +53,7 @@ class Expense:
                     date_obj = datetime.strptime(date, "%Y-%m-%d %H:%M:%S")
                     self._date = date_obj
                 except ValueError:
-                    raise ValueError(f"Date does not match format {self.DATE_FORMAT} or YYYY-MM-DD HH:MM:SS.")
+                    raise ValueError("Invalid date format. Please enter the date in the format YYYY-MM-DD.")
     
     @property
     def amount(self):
@@ -191,6 +191,26 @@ class Expense:
 
         row = CURSOR.execute(sql, (id,)).fetchone()
         return cls.instance_from_db(row) if row else None
+    
+    @classmethod
+    def find_by_date(cls, user_id, start_date, end_date=None):
+        """Return Expense object(s) corresponding to the table row matching the specified user_id and date"""
+        if end_date is None:
+            sql = """
+                SELECT *
+                FROM expenses
+                WHERE user_id = ? AND date = ?
+            """
+            rows = CURSOR.execute(sql, (user_id, start_date,)).fetchall()
+        else:    
+            sql = """
+                SELECT *
+                FROM expenses
+                WHERE user_id = ? AND date BETWEEN ? AND ?
+            """
+            rows = CURSOR.execute(sql, (user_id, start_date, end_date,)).fetchall()
+        
+        return [cls.instance_from_db(row) for row in rows]
 
     def get_category_name(self):
         category = Category.find_by_id(self.category_id)

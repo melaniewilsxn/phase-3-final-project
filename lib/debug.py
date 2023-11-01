@@ -29,6 +29,8 @@ def reset_database():
     Category.create("Entertainment")
     Category.create("Miscellaneous")
     Expense.create(1, "2023-09-01", 1200.00, 1, "Monthly rent")
+    Expense.create(1, "2023-09-01", 60.00, 4, "Internet")
+    Expense.create(1, "2023-09-01", 97.22, 4, "Electric bill")
     Expense.create(1, "2023-09-03", 65.45, 3, "Groceries for the week")
     Expense.create(1, "2023-09-04", 30.00, 2, "Gas refill")
     Expense.create(1, "2023-09-10", 200.00, 4, "Electricity bill")

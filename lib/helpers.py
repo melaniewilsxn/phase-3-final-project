@@ -4,6 +4,7 @@ from models.expense import Expense
 from models.category import Category
 import bcrypt
 from getpass import getpass
+from datetime import datetime
 
 def exit_program():
     print("Goodbye!")
@@ -53,3 +54,23 @@ def list_expenses_by_category(category_id):
     expenses = category.expenses()
     for expense in expenses:
         print(expense)
+
+def list_expenses_by_date(user):
+    DATE_FORMAT = "%Y-%m-%d"
+
+    start_date_str = input("Enter start date (YYYY-MM-DD): ")
+    end_date_str = input("Enter end date (YYYY-MM-DD) or press enter to view expenses for a single date: ")
+
+    try:
+        start_date = datetime.strptime(start_date_str, DATE_FORMAT)
+        print(start_date)
+
+        if not end_date_str:
+            expenses = Expense.find_by_date(user.id, start_date)
+        else:
+            end_date = datetime.strptime(end_date_str, DATE_FORMAT)
+            expenses = Expense.find_by_date(user.id, start_date, end_date)
+        for expense in expenses:
+            print(expense)
+    except ValueError:
+        print("Invalid date format. Please enter the date in the format YYYY-MM-DD.")

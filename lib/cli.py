@@ -6,7 +6,8 @@ from helpers import (
     create_user,
     list_all_expenses,
     list_categories,
-    list_expenses_by_category
+    list_expenses_by_category,
+    list_expenses_by_date
 )
 
 def main_menu(current_user):
@@ -20,7 +21,7 @@ def main_menu(current_user):
             category_id = input("Please enter the number corresponding to the category you would like to see expenses for: ")
             list_expenses_by_category(category_id)
         elif choice == "3":
-            pass
+            list_expenses_by_date(current_user)
         elif choice == "4":
             pass
         elif choice == "5":
