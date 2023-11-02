@@ -71,7 +71,7 @@ class Category:
             SET name = ?
             WHERE id = ?
         """
-        CURSOR.execute(sql, (self.name,))
+        CURSOR.execute(sql, (self.name, self.id))
         CONN.commit()
 
     def delete(self):

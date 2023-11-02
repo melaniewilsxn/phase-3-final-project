@@ -261,3 +261,15 @@ class User:
         return [
             Expense.instance_from_db(row) for row in rows
         ]
+    
+    def expense_by_id(self, id):
+        """Return list of expenses associated with current user"""
+        from models.expense import Expense
+        sql = """
+            SELECT * FROM expenses
+            WHERE user_id = ? AND id = ?
+        """
+        CURSOR.execute(sql, (self.id, id,),)
+
+        row = CURSOR.fetchone()
+        return Expense.instance_from_db(row) if row else None

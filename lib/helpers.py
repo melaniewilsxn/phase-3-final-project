@@ -63,7 +63,6 @@ def list_expenses_by_date(user):
 
     try:
         start_date = datetime.strptime(start_date_str, DATE_FORMAT)
-        print(start_date)
 
         if not end_date_str:
             expenses = Expense.find_by_date(user.id, start_date)
@@ -74,3 +73,94 @@ def list_expenses_by_date(user):
             print(expense)
     except ValueError:
         print("Invalid date format. Please enter the date in the format YYYY-MM-DD.")
+    
+def find_expenses_by_description(user):
+    description = input("Enter the description you would like to search: ")
+
+    expenses = Expense.find_by_description(user.id, description)
+    for expense in expenses:
+        print(expense)
+
+def create_expense(user):
+    date = input("Enter date in the format YYYY-MM-DD: ")
+    raw_amount = input("Enter amount with two decimal places: $")
+    description = input("Enter the description: ")
+    list_categories()
+    raw_category_id = input("Enter the id number of the category: ")
+
+    try:
+        amount = float(raw_amount)
+        category_id = int(raw_category_id)
+        expense = Expense.create(user.id, date, amount, category_id, description)
+        print(f"Success: {expense}")
+    except Exception as exc:
+        print("Error creating expense: ", exc)
+
+def update_expense(user):
+    id_ = input("Enter the expense's id: ")
+    if expense := user.expense_by_id(id_):
+        try:
+            date = input("Enter date in the format YYYY-MM-DD: ")
+            expense.date = date
+            raw_amount = input("Enter amount with two decimal places: $")
+            expense.amount = float(raw_amount)
+            description = input("Enter the description: ")
+            expense.description = description
+            list_categories()
+            raw_category_id = input("Enter the id number of the category: ")
+            expense.category_id = int(raw_category_id)
+
+            expense.update()
+            print(f"Success: {expense}")
+        except Exception as exc:
+            print("Error updating expense: ", exc)
+    else:
+        print(f'Expense {id_} not found')
+
+def delete_expense(user):
+    id_ = input("Enter the expense's id: ")
+    if expense := user.expense_by_id(id_):
+        expense.delete()
+        print(f"Expense {id_} deleted")
+    else:
+        print(f'Expense {id_} not found')
+
+def find_category_by_name():
+    name = input("Enter the category's name: ")
+    category = Category.find_by_name(name)
+    print(category) if category else print(f"Category {name} not found")
+
+def find_category_by_id():
+    id_ = input("Enter the category's id: ")
+    category = Category.find_by_id(id_)
+    print(category) if category else print(f"Category {id_} not found")
+
+def create_category():
+    name = input("Enter the category's name: ")
+    try:
+        category = Category.create(name)
+        print(f"Success: {category}")
+    except Exception as exc:
+        print("Error creating category: ", exc)
+
+def update_category():
+    id_ = input("Enter the category's id: ")
+    if category := Category.find_by_id(id_):
+        try:
+            name = input("Enter the category's name: ")
+            category.name = name
+
+            category.update()
+            print(f"Success: {category}")
+        except Exception as exc:
+            print("Error updating category: ", exc)
+    else:
+        print(f'Category {id_} not found')
+
+def delete_category():
+    id_ = input("Enter the expense's id: ")
+    if category := Category.find_by_id(id_):
+        category.delete()
+        print(f"Category {id_} deleted")
+    else:
+        print(f'Category {id_} not found')

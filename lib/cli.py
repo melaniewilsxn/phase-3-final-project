@@ -7,7 +7,16 @@ from helpers import (
     list_all_expenses,
     list_categories,
     list_expenses_by_category,
-    list_expenses_by_date
+    list_expenses_by_date,
+    find_expenses_by_description,
+    create_expense,
+    update_expense,
+    delete_expense,
+    find_category_by_name,
+    find_category_by_id,
+    create_category,
+    update_category,
+    delete_category
 )
 
 def main_menu(current_user):
@@ -23,27 +32,25 @@ def main_menu(current_user):
         elif choice == "3":
             list_expenses_by_date(current_user)
         elif choice == "4":
-            pass
+            find_expenses_by_description(current_user)
         elif choice == "5":
-            pass
+            create_expense(current_user)
         elif choice == "6":
-            pass
+            update_expense(current_user)
         elif choice == "7":
-            pass
+            delete_expense(current_user)
         elif choice == "8":
-            pass
+            list_categories()
         elif choice == "9":
-            pass
+            find_category_by_name()
         elif choice == "10":
-            pass
+            find_category_by_id()
         elif choice == "11":
-            pass
+            create_category()
         elif choice == "12":
-            pass
+            update_category()
         elif choice == "13":
-            pass
-        elif choice == "14":
-            pass
+            delete_category()
         elif choice == "0":
             current_user = None
             login_menu()
@@ -53,10 +60,12 @@ def main_menu(current_user):
 
 def login_menu():
     while True:
+        print("------------------------------------")
         print("\nWelcome to the Expense Tracker App!")
         print("1. Log in")
         print("2. Create a new user")
         print("0. Exit")
+        print("------------------------------------")
         choice = input("Please enter the number corresponding to your choice: ")
         
         if choice == "0":
@@ -73,22 +82,23 @@ def login_menu():
             print("Invalid choice. Please try again.")
 
 def menu():
+    print("------------------------------------")
     print("Please select an option:")
     print("1. List all expenses")
     print("2. List all expenses by category")
     print("3. List all expenses by date")
-    print("4: Search expense by name")
-    print("5: Search expense by date")
-    print("6: Create expense")
-    print("7: Update expense")
-    print("8: Delete expense")
-    print("9. List all categories")
-    print("10. Find category by name")
-    print("11. Find category by id")
-    print("12: Create category")
-    print("13: Update category")
-    print("14: Delete category")
+    print("4: Search expense by description")
+    print("5: Create expense")
+    print("6: Update expense")
+    print("7: Delete expense")
+    print("8. List all categories")
+    print("9. Find category by name")
+    print("10. Find category by id")
+    print("11: Create category")
+    print("12: Update category")
+    print("13: Delete category")
     print("0: Logout")
+    print("------------------------------------")
 
 if __name__ == "__main__":
     login_menu()

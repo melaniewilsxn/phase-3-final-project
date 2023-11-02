@@ -20,8 +20,8 @@ class Expense:
         category_name = self.get_category_name()
         date_str = self.date.strftime(self.DATE_FORMAT)
         return (
-            f"<Expense Date: {date_str}" +
-            f"\nCategory: {category_name}, Amount: ${self.amount}, Description: {self.description}>"
+            f"<Expense ID: {self.id}, Date: {date_str}" +
+            f"\nCategory: {category_name}, Amount: ${self.amount:.2f}, Description: {self.description}>"
         )
     
     @property
@@ -140,6 +140,19 @@ class Expense:
         """
         CURSOR.execute(sql, (self.user_id, self.date, self.amount, self.category_id, self.description, self.id))
         CONN.commit()
+    
+    def delete(self):
+        """Delete the table row corresponding to the current Expense instance, delete the dictionary entry, and reassign id attribute"""
+        sql = """
+            DELETE FROM expenses
+            WHERE id = ?
+        """
+
+        CURSOR.execute(sql, (self.id,))
+        CONN.commit()
+    
+        del type(self).all[self.id]
+        self.id = None
 
     @classmethod
     def create(cls, user_id, date, amount, category_id, description):
@@ -210,6 +223,18 @@ class Expense:
             """
             rows = CURSOR.execute(sql, (user_id, start_date, end_date,)).fetchall()
         
+        return [cls.instance_from_db(row) for row in rows]
+    
+    @classmethod
+    def find_by_description(cls, user_id, description):
+        """Return Expense object corresponding to the table row matching the specified primary key"""
+        sql = """
+            SELECT *
+            FROM expenses
+            WHERE user_id = ? AND description LIKE ?
+        """
+
+        rows = CURSOR.execute(sql, (user_id, f"%{description}%")).fetchall()
         return [cls.instance_from_db(row) for row in rows]
 
     def get_category_name(self):
