@@ -1,172 +1,62 @@
-# Phase 3 CLI+ORM Project Template
+# CLI Expense Tracker
 
-## Learning Goals
+## Descripition
 
-- Discuss the basic directory structure of a CLI.
-- Outline the first steps in building a CLI.
+The Expense Tracker CLI is a simple yet powerful command-line application designed to help individuals manage and track their expenses efficiently. This application provides an intuitive text-based interface that allows users to easily record, view, and organize their financial transactions with minimal effort.
 
----
+Features include: 
+- User Authentication: Secure login functionality ensures that each user's financial data is kept private and safe.
+- Expense Management: Users can add new expenses, specifying details such as the date, amount, category, and description.
+- View Expenses: The application allows users to view their recorded expenses, filtered by date, category, or description, offering a clear understanding of their spending patterns.
+- Update and Delete Options: Users have the flexibility to modify or remove their expenses, enabling them to keep their financial records accurate and up-to-date.
+- Category Customization: The application includes the ability to manage expense categories, allowing users to tailor the categories to their specific needs.
 
-## Introduction
+Whether you are looking to track your personal expenditures, or just need a simple tool to keep an eye on your financial habits, the Expense Tracker CLI offers a straightforward solution. Its command-line interface is easy to navigate and is perfect for those who prefer a quick, keyboard-only approach to manage their finances.
 
-You now have a basic idea of what constitutes a CLI. Fork and clone this lesson
-for a project template for your CLI.
+This application is built with the aim of making personal finance management accessible and hassle-free, especially for those who value simplicity and efficiency.
 
-Take a look at the directory structure:
+## Installation and Usage
 
-```console
-.
-├── Pipfile
-├── Pipfile.lock
-├── README.md
-└── lib
-    ├── models
-    │   ├── __init__.py
-    │   └── model_1.py
-    ├── cli.py
-    ├── debug.py
-    └── helpers.py
-```
+1. To run this application you first need to fork and clone this repository: 
 
-Note: The directory also includes two files named `CONTRIBUTING.md` and
-`LICENSE.md` that are specific to Flatiron's curriculum. You can disregard or
-delete the files if you want.
+`$ git clone https://github.com/melaniewilsxn/phase-3-final-project`
 
----
+2. Install all dependencies:
 
-## Generating Your Environment
+`$ pipenv install`
 
-You might have noticed in the file structure- there's already a Pipfile!
+3. Enter virtual environemnt:
 
-Install any additional dependencies you know you'll need for your project by
-adding them to the `Pipfile`. Then run the commands:
+`$ pipenv shell`
 
-```console
-pipenv install
-pipenv shell
-```
+4. To reset CLI to original state:
 
----
+`$ python lib/debug.py`
 
-## Generating Your CLI
+5. To use CLI:
+ 
+`$ python lib/cli.py`
 
-A CLI is, simply put, an interactive script and prompts the user and performs
-operations based on user input.
+## Technologies Used
 
-The project template has a sample CLI in `lib/cli.py` that looks like this:
+- Python
+- SQLite
+- Command Line Interface (CLI)
+- bcrypt for hashing passwords
+- datetime
 
-```py
-# lib/cli.py
+## Contributing
 
-from helpers import (
-    exit_program,
-    helper_1
-)
+Contributions are welcome! If you encounter any issues or have suggestions for improvements, feel free to submit a pull request or open an issue in the repository.
 
+## License
 
-def main():
-    while True:
-        menu()
-        choice = input("> ")
-        if choice == "0":
-            exit_program()
-        elif choice == "1":
-            helper_1()
-        else:
-            print("Invalid choice")
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT). You are free to modify and distribute this software.
 
+## Contact
 
-def menu():
-    print("Please select an option:")
-    print("0. Exit the program")
-    print("1. Some useful function")
+If you have any questions, feedback, or inquiries, please reach out to me at melaniemwilson1@gmail.com. I would love to hear from you!
 
+## Credits
 
-if __name__ == "__main__":
-    main()
-```
-
-The helper functions are located in `lib/helpers.py`:
-
-```py
-# lib/helpers.py
-
-def helper_1():
-    print("Performing useful function#1.")
-
-
-def exit_program():
-    print("Goodbye!")
-    exit()
-```
-
-You can run the template CLI with `python lib/cli.py`, or include the shebang
-and make it executable with `chmod +x`. The template CLI will ask for input, do
-some work, and accomplish some sort of task.
-
-Past that, CLIs can be whatever you'd like, as long as you follow the project
-requirements.
-
-Of course, you will update `lib/cli.py` with prompts that are appropriate for
-your application, and you will update `lib/helpers.py` to replace `helper_1()`
-with a useful function based on the specific problem domain you decide to
-implement, along with adding other helper functions to the module.
-
-In the `lib/models` folder, you should rename `model_1.py` with the name of a
-data model class from your specific problem domain, and add other classes to the
-folder as needed. The file `lib/models/__init__.py` has been initialized to
-create the necessary database constants. You need to add import statements to
-the various data model classes in order to use the database constants.
-
-You are also welcome to implement a different module and directory structure.
-However, your project should be well organized, modular, and follow the design
-principal of separation of concerns, which means you should separate code
-related to:
-
-- User interface
-- Data persistence
-- Problem domain rules and logic
-
----
-
-## Updating README.md
-
-`README.md` is a Markdown file that should describe your project. You will
-replace the contents of this `README.md` file with a description of **your**
-actual project.
-
-Markdown is not a language that we cover in Flatiron's Software Engineering
-curriculum, but it's not a particularly difficult language to learn (if you've
-ever left a comment on Reddit, you might already know the basics). Refer to the
-cheat sheet in this assignments's resources for a basic guide to Markdown.
-
-### What Goes into a README?
-
-This README serves as a template. Replace the contents of this file to describe
-the important files in your project and describe what they do. Each Python file
-that you edit should get at least a paragraph, and each function should be
-described with a sentence or two.
-
-Describe your actual CLI script first, and with a good level of detail. The rest
-should be ordered by importance to the user. (Probably functions next, then
-models.)
-
-Screenshots and links to resources that you used throughout are also useful to
-users and collaborators, but a little more syntactically complicated. Only add
-these in if you're feeling comfortable with Markdown.
-
----
-
-## Conclusion
-
-A lot of work goes into a good CLI, but it all relies on concepts that you've
-practiced quite a bit by now. Hopefully this template and guide will get you off
-to a good start with your Phase 3 Project.
-
-Happy coding!
-
----
-
-## Resources
-
-- [Markdown Cheat Sheet](https://www.markdownguide.org/cheat-sheet/)
+This project was completed independently by me, Melanie Wilson. You can find my github profile at https://github.com/melaniewilsxn and my Linkedin profile at https://www.linkedin.com/in/melanie-marie-wilson/.
