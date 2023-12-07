@@ -29,11 +29,15 @@ This application is built with the aim of making personal finance management acc
 
 `$ pipenv shell`
 
-4. To reset CLI to original state:
+4. Install bcrypt:
+
+`$ pip install bcrypt`
+
+5. To reset CLI to original state:
 
 `$ python lib/debug.py`
 
-5. To use CLI:
+6. To use CLI:
  
 `$ python lib/cli.py`
 
