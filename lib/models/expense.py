@@ -14,14 +14,16 @@ class Expense:
         self.date = date
         self.amount = amount
         self.category_id = category_id
+        self.category_name = self.get_category_name()
+        self.date_str = self.date.strftime(self.DATE_FORMAT)
         self.description = description
 
     def __repr__(self):
-        category_name = self.get_category_name()
-        date_str = self.date.strftime(self.DATE_FORMAT)
+        # category_name = self.get_category_name()
+        # date_str = self.date.strftime(self.DATE_FORMAT)
         return (
-            f"<Expense ID: {self.id}, Date: {date_str}" +
-            f"\nCategory: {category_name}, Amount: ${self.amount:.2f}, Description: {self.description}>"
+            f"<Expense ID: {self.id}, Date: {self.date_str}" +
+            f"\nCategory: {self.category_name}, Amount: ${self.amount:.2f}, Description: {self.description}>"
         )
     
     @property

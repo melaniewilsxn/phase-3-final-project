@@ -35,31 +35,35 @@ def create_user():
 
     try:
         user = User.create(first_name, last_name, email, username, password)
-        print(f'Success: {user}')
+        print(f'Success! {user.username} has been created. You can now login!')
     except Exception as exc:
         print("Error creating new user: ", exc)
 
 def list_all_expenses(user):
     expenses = user.expenses()
+    i = 1
     for expense in expenses:
-        print(expense)
+        print(f"{i}. Date: {expense.date_str}, Category: {expense.category_name}, Amount: {expense.amount}, Description: {expense.description}, ID: {expense.id}")
+        i+=1
 
 def list_categories():
     categories = Category.get_all()
     for category in categories:
-        print(category)
+        print(f"ID: {category.id}, Name: {category.name}")
 
 def list_expenses_by_category(category_id):
     category = Category.find_by_id(category_id)
     expenses = category.expenses()
+    i = 1
     for expense in expenses:
-        print(expense)
+        print(f"{i}. Date: {expense.date_str}, Category: {expense.category_name}, Amount: {expense.amount}, Description: {expense.description}, ID: {expense.id}")
+        i+=1
 
 def list_expenses_by_date(user):
     DATE_FORMAT = "%Y-%m-%d"
 
-    start_date_str = input("Enter start date (YYYY-MM-DD): ")
-    end_date_str = input("Enter end date (YYYY-MM-DD) or press enter to view expenses for a single date: ")
+    start_date_str = input("Enter the start date (YYYY-MM-DD): ")
+    end_date_str = input("Enter the end date (YYYY-MM-DD) or press enter to view expenses for a single date: ")
 
     try:
         start_date = datetime.strptime(start_date_str, DATE_FORMAT)
@@ -69,17 +73,20 @@ def list_expenses_by_date(user):
         else:
             end_date = datetime.strptime(end_date_str, DATE_FORMAT)
             expenses = Expense.find_by_date(user.id, start_date, end_date)
+        i = 1
         for expense in expenses:
-            print(expense)
+            print(f"{i}. Date: {expense.date_str}, Category: {expense.category_name}, Amount: {expense.amount}, Description: {expense.description}, ID: {expense.id}")
+            i+=1
     except ValueError:
         print("Invalid date format. Please enter the date in the format YYYY-MM-DD.")
     
 def find_expenses_by_description(user):
     description = input("Enter the description you would like to search: ")
-
     expenses = Expense.find_by_description(user.id, description)
+    i = 1
     for expense in expenses:
-        print(expense)
+        print(f"{i}. Date: {expense.date_str}, Category: {expense.category_name}, Amount: {expense.amount}, Description: {expense.description}, ID: {expense.id}")
+        i+=1
 
 def create_expense(user):
     date = input("Enter date in the format YYYY-MM-DD: ")
@@ -92,7 +99,7 @@ def create_expense(user):
         amount = float(raw_amount)
         category_id = int(raw_category_id)
         expense = Expense.create(user.id, date, amount, category_id, description)
-        print(f"Success: {expense}")
+        print(f"Success! Expense has been added ==> Date: {expense.date_str}, Category: {expense.category_name}, Amount: {expense.amount}, Description: {expense.description}, ID: {expense.id}")
     except Exception as exc:
         print("Error creating expense: ", exc)
 
@@ -111,7 +118,7 @@ def update_expense(user):
             expense.category_id = int(raw_category_id)
 
             expense.update()
-            print(f"Success: {expense}")
+            print(f"Success! Expense has been updated ==> Date: {expense.date_str}, Category: {expense.category_name}, Amount: {expense.amount}, Description: {expense.description}, ID: {expense.id}")
         except Exception as exc:
             print("Error updating expense: ", exc)
     else:
@@ -121,7 +128,7 @@ def delete_expense(user):
     id_ = input("Enter the expense's id: ")
     if expense := user.expense_by_id(id_):
         expense.delete()
-        print(f"Expense {id_} deleted")
+        print(f"Success! Expense has been deleted.")
     else:
         print(f'Expense {id_} not found')
 
@@ -139,7 +146,7 @@ def create_category():
     name = input("Enter the category's name: ")
     try:
         category = Category.create(name)
-        print(f"Success: {category}")
+        print(f"Success! Category has been added ==> ID: {category.id}, Name: {category.name}")
     except Exception as exc:
         print("Error creating category: ", exc)
 
@@ -151,7 +158,7 @@ def update_category():
             category.name = name
 
             category.update()
-            print(f"Success: {category}")
+            print(f"Success! Category has been updated ==> ID: {category.id}, Name: {category.name}")
         except Exception as exc:
             print("Error updating category: ", exc)
     else:
@@ -161,6 +168,6 @@ def delete_category():
     id_ = input("Enter the expense's id: ")
     if category := Category.find_by_id(id_):
         category.delete()
-        print(f"Category {id_} deleted")
+        print(f"Success! Category has been deleted.")
     else:
         print(f'Category {id_} not found')

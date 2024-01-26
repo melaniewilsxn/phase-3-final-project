@@ -136,7 +136,7 @@ class User:
             if "UNIQUE constraint failed: users.email" in str(e):
                 raise ValueError(f"Email {self.email} already exists in database! Please login or use a different email.")
             elif "UNIQUE constraint failed: users.username" in str(e):
-                raise ValueError(f"Username {self.username} already exists in database! Please login or use a different email.")
+                raise ValueError(f"Username {self.username} already exists in database! Please login or use a different username.")
             else:
                 raise e
 
