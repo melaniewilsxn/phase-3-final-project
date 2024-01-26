@@ -135,12 +135,12 @@ def delete_expense(user):
 def find_category_by_name():
     name = input("Enter the category's name: ")
     category = Category.find_by_name(name)
-    print(category) if category else print(f"Category {name} not found")
+    print(f"ID: {category.id}, Name: {category.name}") if category else print(f"Category {name} not found")
 
 def find_category_by_id():
     id_ = input("Enter the category's id: ")
     category = Category.find_by_id(id_)
-    print(category) if category else print(f"Category {id_} not found")
+    print(f"ID: {category.id}, Name: {category.name}") if category else print(f"Category {id_} not found")
 
 def create_category():
     name = input("Enter the category's name: ")
