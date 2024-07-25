@@ -1,8 +1,8 @@
-# CLI Expense Tracker
+# PennyWise
 
 ## Descripition
 
-The Expense Tracker CLI is a simple yet powerful command-line application designed to help individuals manage and track their expenses efficiently. This application provides an intuitive text-based interface that allows users to easily record, view, and organize their financial transactions with minimal effort.
+PennyWise is a simple yet powerful command-line application designed to help individuals manage and track their expenses efficiently. This application provides an intuitive text-based interface that allows users to easily record, view, and organize their financial transactions with minimal effort.
 
 Features include: 
 - User Authentication: Secure login functionality ensures that each user's financial data is kept private and safe.
@@ -11,7 +11,7 @@ Features include:
 - Update and Delete Options: Users have the flexibility to modify or remove their expenses, enabling them to keep their financial records accurate and up-to-date.
 - Category Customization: The application includes the ability to manage expense categories, allowing users to tailor the categories to their specific needs.
 
-Whether you are looking to track your personal expenditures, or just need a simple tool to keep an eye on your financial habits, the Expense Tracker CLI offers a straightforward solution. Its command-line interface is easy to navigate and is perfect for those who prefer a quick, keyboard-only approach to manage their finances.
+Whether you are looking to track your personal expenditures, or just need a simple tool to keep an eye on your financial habits, PennyWise offers a straightforward solution. Its command-line interface is easy to navigate and is perfect for those who prefer a quick, keyboard-only approach to manage their finances.
 
 This application is built with the aim of making personal finance management accessible and hassle-free, especially for those who value simplicity and efficiency.
 
